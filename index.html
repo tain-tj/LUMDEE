@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบเลือกเมนูอาหาร</title>
+    
+    <!-- ฟอนต์ Kanit เพื่อความชัดเจน อ่านง่ายสำหรับผู้สูงอายุ -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #f4f6f9;
+            font-size: 1.25rem; /* ขนาดอักษรใหญ่ */
+        }
+        .form-select-lg {
+            font-size: 1.3rem;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-left: 5px solid #0d6efd;
+            padding-left: 10px;
+        }
+        .card-select {
+            cursor: pointer;
+            border: 4px solid transparent;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .card-select:hover { transform: scale(1.02); }
+        .card-select.active {
+            border-color: #198754; /* สีเขียวชัดเจนเมื่อเลือก */
+            background-color: #e8f5e9;
+            transform: scale(1.02);
+            box-shadow: 0 8px 15px rgba(25, 135, 84, 0.3);
+        }
+        .card-select.active::after {
+            content: '\f058'; /* Check-circle icon */
+            font-family: 'FontAwesome';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2.5rem;
+            color: #198754;
+            background: white;
+            border-radius: 50%;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .menu-list { font-size: 1.15rem; color: #555; }
+        .btn-xl {
+            font-size: 1.5rem;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+        .modal-body p { font-size: 1.3rem; }
+    </style>
+</head>
+<body>
+
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary"><i class="fas fa-concierge-bell"></i> เลือกระบบอาหาร</h1>
+        <p class="text-muted fs-5">กรุณาเลือกชื่อ ชุดอาหาร และชนิดข้าว</p>
+    </div>
+
+    <!-- 1. เลือกชื่อ -->
+    <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+        <div class="section-title"><i class="fas fa-user-circle text-primary"></i> 1. เลือกชื่อของคุณ</div>
+        <select class="form-select form-select-lg" id="nameSelect" onchange="checkExistingUser()">
+            <option value="" disabled selected>-- แตะเพื่อเลือกชื่อ --</option>
+            <option value="นพ.วิโรจน์ ดิเรกสถาพร">นพ.วิโรจน์ ดิเรกสถาพร</option>
+            <option value="ผป.นพ.ประวิง เอื้อนนทัช">ผป.นพ.ประวิง เอื้อนนทัช</option>
+            <option value="ผป.นพ.เอกลาภ ทองบริสุทธิ์">ผป.นพ.เอกลาภ ทองบริสุทธิ์</option>
+            <option value="ศจ.ดร.ศิริรัตน์ ปุสุรินทร์คำ">ศจ.ดร.ศิริรัตน์ ปุสุรินทร์คำ</option>
+            <option value="คุณพงศธร คุณานุสรณ์">คุณพงศธร คุณานุสรณ์</option>
+            <option value="ผป.ดร.ภก.สุวิทย์ ธีรกุลชน">ผป.ดร.ภก.สุวิทย์ ธีรกุลชน</option>
+            <option value="ผป.นพ.มาโนช เล้าวงค์">ผป.นพ.มาโนช เล้าวงค์</option>
+            <option value="นพ.ชูศักดิ์ วงศ์สุรีย์">นพ.ชูศักดิ์ วงศ์สุรีย์</option>
+            <option value="นพ.พรรณศักดิ์ วุฒิวโรภาส">นพ.พรรณศักดิ์ วุฒิวโรภาส</option>
+            <option value="นพ.พรชัย วงศ์อุไรเลิศกุล">นพ.พรชัย วงศ์อุไรเลิศกุล</option>
+            <option value="ผป.นพ.พรรณศักดิ์ วุฒิวโรภาส">ผป.นพ.พรรณศักดิ์ วุฒิวโรภาส</option>
+            <option value="ผป.นพ.ณัฐชัย เครือจักร">ผป.นพ.ณัฐชัย เครือจักร</option>
+        </select>
+    </div>
+
+    <!-- 2. เลือกชุดอาหาร -->
+    <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+        <div class="section-title"><i class="fas fa-utensils text-danger"></i> 2. เลือกชุดอาหาร (แตะที่รูป)</div>
+        <div class="row g-4">
+            <div class="col-12 col-md-6">
+                <div class="card card-select" id="card-set1" onclick="selectFood('ชุดที่ 1', 'card-set1')">
+                    <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="ชุดที่ 1">
+                    <div class="card-body text-center">
+                        <h3 class="card-title fw-bold text-success">ชุดที่ 1</h3>
+                        <p class="menu-list">คั่วแคฮังเล, ตำมะเขือไข่ต้ม, เชียงดาผัดไข่, ลาบปลาสำลี, แกงปลี</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card card-select" id="card-set2" onclick="selectFood('ชุดที่ 2', 'card-set2')">
+                    <img src="https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="ชุดที่ 2">
+                    <div class="card-body text-center">
+                        <h3 class="card-title fw-bold text-success">ชุดที่ 2</h3>
+                        <p class="menu-list">น้ำพริกหนุ่ม, เชียงดาผัดไข่, แกงฮังเล, ลาบคั่วหมู</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. เลือกชนิดข้าว -->
+    <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+        <div class="section-title"><i class="fas fa-bowl-rice text-warning"></i> 3. เลือกชนิดข้าว (แตะที่รูป)</div>
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <div class="card card-select" id="card-rice1" onclick="selectRice('ข้าวสวย', 'card-rice1')">
+                    <img src="https://images.unsplash.com/photo-1536304929831-ee1ca9d44906?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="ข้าวสวย">
+                    <div class="card-body text-center">
+                        <h4 class="card-title fw-bold">ข้าวสวย</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-select" id="card-rice2" onclick="selectRice('ข้าวเหนียวขาว', 'card-rice2')">
+                    <img src="https://images.unsplash.com/photo-1589134707176-7871b6ba404f?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="ข้าวเหนียวขาว">
+                    <div class="card-body text-center">
+                        <h4 class="card-title fw-bold">ข้าวเหนียวขาว</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-select" id="card-rice3" onclick="selectRice('ข้าวเหนียวก่ำดอย', 'card-rice3')">
+                    <img src="https://images.unsplash.com/photo-1610452668582-7d2d398d8932?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="ข้าวเหนียวก่ำดอย">
+                    <div class="card-body text-center">
+                        <h4 class="card-title fw-bold">ข้าวเหนียวก่ำดอย</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary w-100 btn-xl shadow" onclick="prepareSubmit()">
+        <i class="fas fa-paper-plane"></i> ยืนยันข้อมูลทั้งหมด
+    </button>
+</div>
+
+<!-- Modal สรุปข้อมูล -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h4 class="modal-title fw-bold"><i class="fas fa-clipboard-check"></i> ตรวจสอบความถูกต้อง</h4>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <p><strong><i class="fas fa-user text-primary"></i> ชื่อ:</strong> <span id="modalName" class="text-primary"></span></p>
+        <p><strong><i class="fas fa-utensils text-danger"></i> อาหาร:</strong> <span id="modalFood" class="text-danger"></span></p>
+        <p><strong><i class="fas fa-bowl-rice text-warning"></i> ข้าว:</strong> <span id="modalRice" class="text-warning"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-lg w-100 mb-2" data-bs-dismiss="modal"><i class="fas fa-arrow-left"></i> ย้อนกลับไปแก้ไข</button>
+        <button type="button" class="btn btn-success btn-lg w-100" onclick="submitData()"><i class="fas fa-check-circle"></i> ส่งข้อมูล</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // ⚠️ นำ URL เว็บแอปของ Google Apps Script มาใส่ที่ตัวแปรนี้
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyI5UmlAkucVM9dcgAmEdKeKc3W8Kxxk8_cxT1jDR0aOoMEkU33iYMO9OprxOow2Z4t/exec'; 
+    
+    let selectedFood = "";
+    let selectedRice = "";
+    let orderedUsers = [];
+
+    // ดึงข้อมูลคนที่เคยเลือกแล้วตอนเปิดหน้าเว็บ
+    window.onload = async () => {
+        try {
+            let res = await fetch(SCRIPT_URL);
+            orderedUsers = await res.json();
+        } catch(e) {
+            console.log("Error loading users", e);
+        }
+    }
+
+    // ตรวจสอบว่าชื่อนี้เคยลงทะเบียนแล้วหรือไม่
+    function checkExistingUser() {
+        let name = document.getElementById("nameSelect").value;
+        if(orderedUsers.includes(name)) {
+            Swal.fire({
+                title: 'ท่านเคยบันทึกข้อมูลแล้ว',
+                text: 'ระบบพบชื่อนี้ในฐานข้อมูลแล้ว ท่านสามารถเลือกเมนูใหม่เพื่อ "แก้ไข" และบันทึกทับข้อมูลเดิมได้ครับ',
+                icon: 'info',
+                confirmButtonText: 'รับทราบ',
+                confirmButtonColor: '#0d6efd'
+            });
+        }
+    }
+
+    function selectFood(foodName, cardId) {
+        selectedFood = foodName;
+        document.querySelectorAll("[id^='card-set']").forEach(el => el.classList.remove('active'));
+        document.getElementById(cardId).classList.add('active');
+    }
+
+    function selectRice(riceName, cardId) {
+        selectedRice = riceName;
+        document.querySelectorAll("[id^='card-rice']").forEach(el => el.classList.remove('active'));
+        document.getElementById(cardId).classList.add('active');
+    }
+
+    function prepareSubmit() {
+        let name = document.getElementById("nameSelect").value;
+        
+        if(!name) {
+            Swal.fire('ข้อมูลไม่ครบ', 'กรุณาเลือกรายชื่อก่อนครับ', 'warning');
+            return;
+        }
+        if(!selectedFood) {
+            Swal.fire('ข้อมูลไม่ครบ', 'กรุณาเลือกชุดอาหารก่อนครับ', 'warning');
+            return;
+        }
+        if(!selectedRice) {
+            Swal.fire('ข้อมูลไม่ครบ', 'กรุณาเลือกชนิดข้าวก่อนครับ', 'warning');
+            return;
+        }
+
+        // แสดงข้อมูลใน Modal
+        document.getElementById("modalName").innerText = name;
+        document.getElementById("modalFood").innerText = selectedFood;
+        document.getElementById("modalRice").innerText = selectedRice;
+
+        let modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        modal.show();
+    }
+
+    async function submitData() {
+        // ปิด Modal เดิม
+        let modalEl = document.getElementById('confirmModal');
+        let modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+
+        let name = document.getElementById("nameSelect").value;
+
+        // แสดง Alert กำลังโหลด
+        Swal.fire({
+            title: 'กำลังบันทึกข้อมูล...',
+            html: 'กรุณารอสักครู่',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
+        try {
+            let response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    name: name,
+                    foodSet: selectedFood,
+                    rice: selectedRice
+                })
+            });
+
+            let result = await response.json();
+            
+            if(result.status === "success" || result.status === "updated") {
+                let msgText = result.status === "updated" ? "แก้ไขข้อมูลสำเร็จ ระบบได้ลบข้อมูลเก่าของท่านออกแล้ว" : "บันทึกข้อมูลของท่านเรียบร้อยแล้ว";
+                
+                Swal.fire({
+                    title: 'สำเร็จ!',
+                    text: msgText,
+                    icon: 'success',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#198754'
+                }).then(() => {
+                    window.location.reload(); // โหลดหน้าใหม่
+                });
+            } else {
+                throw new Error("System error");
+            }
+        } catch (error) {
+            Swal.fire('เกิดข้อผิดพลาด', 'ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง', 'error');
+        }
+    }
+</script>
+
+</body>
+</html>
