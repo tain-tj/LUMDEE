@@ -60,9 +60,10 @@
             color: #198754;
             background: white;
             border-radius: 50%;
+            z-index: 2;
         }
         .card-img-top {
-            height: 200px;
+            height: 250px;
             object-fit: cover;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
@@ -75,14 +76,35 @@
             font-weight: 600;
         }
         .modal-body p { font-size: 1.3rem; }
+        
+        /* สไตล์สำหรับรูปปก */
+        .cover-image-container {
+            width: 100%;
+            max-height: 350px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .cover-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
     </style>
 </head>
 <body>
 
-<div class="container py-4">
+<!-- รูปปกบนสุด -->
+<div class="cover-image-container">
+    <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/LUMDEE.jpg" alt="รูปร้านลำดี">
+</div>
+
+<div class="container py-2">
     <div class="text-center mb-4">
         <h1 class="fw-bold text-primary"><i class="fas fa-concierge-bell"></i> เลือกเมนูร้านลำดี ตี้ ขัวแดง</h1>
-        <p class="text-muted fs-5">กรุณาเลือกชื่อ ชุดอาหาร และชนิดข้าว</p>
+        <p class="text-muted fs-5 mb-1">กรุณาเลือกชื่อ ชุดอาหาร และชนิดข้าว</p>
+        <p class="text-danger fw-bold fs-4 mb-3"><i class="fas fa-clock"></i> กรุณาเลือกภายในวันที่ 19 ตุลาคม 2026</p>
     </div>
 
     <!-- 1. เลือกชื่อ -->
@@ -107,23 +129,31 @@
 
     <!-- 2. เลือกชุดอาหาร -->
     <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
-        <div class="section-title"><i class="fas fa-utensils text-danger"></i> 2. เลือกชุดอาหาร (แตะที่รูป)</div>
+        <div class="section-title"><i class="fas fa-utensils text-danger"></i> 2. เลือกชุดอาหาร (แตะที่การ์ดเพื่อเลือก)</div>
         <div class="row g-4">
             <div class="col-12 col-md-6">
-                <div class="card card-select" id="card-set1" onclick="selectFood('ชุดที่ 1', 'card-set1')">
+                <div class="card card-select" id="card-set1" onclick="selectFood('ชุดที่ 1', 'คั่วแคฮังเล, ตำมะเขือไข่ต้ม, เชียงดาผัดไข่, ลาบปลาสำลี, แกงปลี', 'card-set1')">
                     <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/1.png" class="card-img-top" alt="ชุดที่ 1">
                     <div class="card-body text-center">
                         <h3 class="card-title fw-bold text-success">ชุดที่ 1</h3>
                         <p class="menu-list">คั่วแคฮังเล, ตำมะเขือไข่ต้ม, เชียงดาผัดไข่, ลาบปลาสำลี, แกงปลี</p>
+                        <!-- ปุ่มกดดูรูปภาพขยาย -->
+                        <button type="button" class="btn btn-outline-primary btn-lg w-100 mt-2" onclick="viewImage('https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/1.png', event)">
+                            <i class="fas fa-search-plus"></i> แตะเพื่อดูรูปขยาย
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-6">
-                <div class="card card-select" id="card-set2" onclick="selectFood('ชุดที่ 2', 'card-set2')">
+                <div class="card card-select" id="card-set2" onclick="selectFood('ชุดที่ 2', 'น้ำพริกหนุ่ม, เชียงดาผัดไข่, แกงฮังเล, ลาบคั่วหมู, ส้มตำอโวคาโด', 'card-set2')">
                     <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/2.png" class="card-img-top" alt="ชุดที่ 2">
                     <div class="card-body text-center">
                         <h3 class="card-title fw-bold text-success">ชุดที่ 2</h3>
                         <p class="menu-list">น้ำพริกหนุ่ม, เชียงดาผัดไข่, แกงฮังเล, ลาบคั่วหมู, ส้มตำอโวคาโด</p>
+                        <!-- ปุ่มกดดูรูปภาพขยาย -->
+                        <button type="button" class="btn btn-outline-primary btn-lg w-100 mt-2" onclick="viewImage('https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/2.png', event)">
+                            <i class="fas fa-search-plus"></i> แตะเพื่อดูรูปขยาย
+                        </button>
                     </div>
                 </div>
             </div>
@@ -134,7 +164,7 @@
     <div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
         <div class="section-title"><i class="fas fa-bowl-rice text-warning"></i> 3. เลือกชนิดข้าว (แตะที่รูป)</div>
         <div class="row g-4">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="card card-select" id="card-rice1" onclick="selectRice('ข้าวสวย', 'card-rice1')">
                     <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/5.png" class="card-img-top" alt="ข้าวสวย">
                     <div class="card-body text-center">
@@ -142,7 +172,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="card card-select" id="card-rice2" onclick="selectRice('ข้าวเหนียวขาว', 'card-rice2')">
                     <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/6.png" class="card-img-top" alt="ข้าวเหนียวขาว">
                     <div class="card-body text-center">
@@ -150,7 +180,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="card card-select" id="card-rice3" onclick="selectRice('ข้าวเหนียวก่ำดอย', 'card-rice3')">
                     <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/3.png" class="card-img-top" alt="ข้าวเหนียวก่ำดอย">
                     <div class="card-body text-center">
@@ -158,7 +188,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-6 col-lg-3">
                 <div class="card card-select" id="card-rice4" onclick="selectRice('ข้าวธัญพืช', 'card-rice4')">
                     <img src="https://raw.githubusercontent.com/tain-tj/LUMDEE/refs/heads/main/4.png" class="card-img-top" alt="ข้าวธัญพืช">
                     <div class="card-body text-center">
@@ -169,7 +199,7 @@
         </div>
     </div>
 
-    <button class="btn btn-primary w-100 btn-xl shadow" onclick="prepareSubmit()">
+    <button class="btn btn-primary w-100 btn-xl shadow mb-5" onclick="prepareSubmit()">
         <i class="fas fa-paper-plane"></i> ยืนยันข้อมูลทั้งหมด
     </button>
 </div>
@@ -183,9 +213,13 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-4">
-        <p><strong><i class="fas fa-user text-primary"></i> ชื่อ:</strong> <span id="modalName" class="text-primary"></span></p>
-        <p><strong><i class="fas fa-utensils text-danger"></i> อาหาร:</strong> <span id="modalFood" class="text-danger"></span></p>
-        <p><strong><i class="fas fa-bowl-rice text-warning"></i> ข้าว:</strong> <span id="modalRice" class="text-warning"></span></p>
+        <p><strong><i class="fas fa-user text-primary"></i> ชื่อ:</strong> <span id="modalName" class="text-primary fw-bold"></span></p>
+        <hr>
+        <p class="mb-1"><strong><i class="fas fa-utensils text-danger"></i> อาหารที่เลือก:</strong></p>
+        <p id="modalFood" class="text-danger fw-bold fs-4 mb-1"></p>
+        <p id="modalFoodItems" class="text-muted" style="font-size: 1.1rem; line-height: 1.4;"></p>
+        <hr>
+        <p><strong><i class="fas fa-bowl-rice text-warning"></i> ชนิดข้าว:</strong> <span id="modalRice" class="text-warning fw-bold"></span></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-lg w-100 mb-2" data-bs-dismiss="modal"><i class="fas fa-arrow-left"></i> ย้อนกลับไปแก้ไข</button>
@@ -198,14 +232,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // ⚠️ นำ URL เว็บแอปของ Google Apps Script มาใส่ที่ตัวแปรนี้
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyI5UmlAkucVM9dcgAmEdKeKc3W8Kxxk8_cxT1jDR0aOoMEkU33iYMO9OprxOow2Z4t/exec'; 
     
     let selectedFood = "";
+    let selectedFoodMenu = ""; // ตัวแปรเก็บรายการอาหารย่อย
     let selectedRice = "";
     let orderedUsers = [];
 
-    // ดึงข้อมูลคนที่เคยเลือกแล้วตอนเปิดหน้าเว็บ
     window.onload = async () => {
         try {
             let res = await fetch(SCRIPT_URL);
@@ -215,7 +248,6 @@
         }
     }
 
-    // ตรวจสอบว่าชื่อนี้เคยลงทะเบียนแล้วหรือไม่
     function checkExistingUser() {
         let name = document.getElementById("nameSelect").value;
         if(orderedUsers.includes(name)) {
@@ -229,8 +261,24 @@
         }
     }
 
-    function selectFood(foodName, cardId) {
+    // ฟังก์ชันสำหรับเปิดดูรูปภาพขยาย โดยไม่ให้ไปคลิกโดนการ์ด
+    function viewImage(url, event) {
+        event.stopPropagation(); // หยุดการทำงานไม่ให้ส่งผ่านไปที่ onclick ของ card
+        Swal.fire({
+            imageUrl: url,
+            imageAlt: 'รูปภาพเมนู',
+            width: '90%',
+            padding: '1em',
+            showConfirmButton: true,
+            confirmButtonText: 'ปิดรูปภาพ',
+            confirmButtonColor: '#dc3545'
+        });
+    }
+
+    // เพิ่มพารามิเตอร์เมนูย่อยเข้ามาด้วย (menuItems)
+    function selectFood(foodName, menuItems, cardId) {
         selectedFood = foodName;
+        selectedFoodMenu = menuItems;
         document.querySelectorAll("[id^='card-set']").forEach(el => el.classList.remove('active'));
         document.getElementById(cardId).classList.add('active');
     }
@@ -260,6 +308,7 @@
         // แสดงข้อมูลใน Modal
         document.getElementById("modalName").innerText = name;
         document.getElementById("modalFood").innerText = selectedFood;
+        document.getElementById("modalFoodItems").innerText = "( " + selectedFoodMenu + " )"; // แสดงรายการเมนูย่อย
         document.getElementById("modalRice").innerText = selectedRice;
 
         let modal = new bootstrap.Modal(document.getElementById('confirmModal'));
@@ -267,14 +316,12 @@
     }
 
     async function submitData() {
-        // ปิด Modal เดิม
         let modalEl = document.getElementById('confirmModal');
         let modal = bootstrap.Modal.getInstance(modalEl);
         modal.hide();
 
         let name = document.getElementById("nameSelect").value;
 
-        // แสดง Alert กำลังโหลด
         Swal.fire({
             title: 'กำลังบันทึกข้อมูล...',
             html: 'กรุณารอสักครู่',
@@ -304,7 +351,7 @@
                     confirmButtonText: 'ตกลง',
                     confirmButtonColor: '#198754'
                 }).then(() => {
-                    window.location.reload(); // โหลดหน้าใหม่
+                    window.location.reload(); 
                 });
             } else {
                 throw new Error("System error");
